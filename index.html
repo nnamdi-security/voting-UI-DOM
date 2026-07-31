@@ -1,12 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./src/output.css">
-    <title>Document</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hackathon 3.0</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  /* Pure CSS modal: a hidden checkbox drives visibility, no JS involved */
+  #result-toggle:checked ~ #result-modal {
+    display: flex;
+  }
+</style>
 </head>
-<body>
-    <H1 class="bg-amber-600">Hackathon Africa</H1>
+<body class="min-h-screen bg-slate-100 font-sans text-slate-800">
+
+  <!-- Hidden checkbox that powers the modal open/close state -->
+  <input type="checkbox" id="result-toggle" class="hidden peer" />
+
+  <!-- Header -->
+  <header class="bg-navy border-b border-slate-300 bg-[#10233f]">
+    <div class="max-w-3xl mx-auto px-6 py-5">
+      <p class="text-[#c9a24b] text-xs font-semibold tracking-[0.2em] uppercase">Hackathon 3.0</p>
+      <h1 class="text-white text-2xl md:text-3xl font-serif font-bold mt-1">Head of House Election Ballot</h1>
+    </div>
+  </header>
+
+  <!-- Main ballot card -->
+  <main class="max-w-3xl mx-auto px-6 mt-10 pb-32">
+    <div class="bg-white border border-slate-200 rounded-lg shadow-sm p-8">
+
+      <h2 class="font-serif text-lg font-semibold text-slate-900 mb-1">Cast your vote</h2>
+      <p class="text-sm text-slate-500 mb-6">Select your name and your chosen candidate, then submit your ballot.</p>
+
+      <form class="space-y-6">
+        <!-- Two selects side by side -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+          <div>
+            <label for="voter-name" class="block text-sm font-medium text-slate-700 mb-1.5">
+              Your name
+            </label>
+            <select
+              id="voter-name"
+              name="voter-name"
+              class="w-full rounded-md border border-slate-300 bg-white px-3 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#10233f] focus:border-[#10233f]"
+            >
+              <option value="" selected disabled>Select your name</option>
+              <option value="chidi">Nnamdi Ileh</option>
+              <option value="amara">Lilian Ezeh</option>
+              <option value="ifeoma">Augustine Chukwu</option>
+              <option value="tunde">Gabriel Njoku</option>
+              <option value="ngozi">Charles Udeh</option>
+              <option value="ngozi">Chidinma</option>
+              <option value="ngozi">Chinecherem</option>
+              <option value="ngozi">Bonaventure</option>
+              <option value="ngozi">Kosi Onyia</option>
+              <option value="ngozi">Okechukwu</option>
+              <option value="ngozi">Majesty</option>
+              <option value="ngozi">Victor</option>
+              <option value="ngozi">Amara</option>
+              <option value="ngozi">Simon</option>
+              <option value="ngozi">Ifeanyichukwu</option>
+              <option value="ngozi">Anthony</option>
+              <option value="ngozi">James Onwude</option>
+              <option value="ngozi">Rita Nnenna</option>
+              <option value="ngozi">Stephanie</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="candidate" class="block text-sm font-medium text-slate-700 mb-1.5">
+              Candidate
+            </label>
+            <select
+              id="candidate"
+              name="candidate"
+              class="w-full rounded-md border border-slate-300 bg-white px-3 py-2.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#10233f] focus:border-[#10233f]"
+            >
+              <option value="" selected disabled>Select a candidate</option>
+              <option value="candidate-a">Candidate A — Augustine Chukwu</option>
+              <option value="candidate-b">Candidate B — Lilian Ezeh</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Vote button -->
+        <div class="pt-2">
+          <button
+            type="submit"
+            class="w-full md:w-auto inline-flex items-center justify-center rounded-md bg-[#10233f] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#193153] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#10233f] transition-colors"
+          >
+            Vote
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- Bottom-left: Show Result button (label toggles the hidden checkbox) -->
+  <label
+    for="result-toggle"
+    class="fixed bottom-6 left-6 cursor-pointer inline-flex items-center rounded-md border border-[#10233f] bg-white px-5 py-2.5 text-sm font-semibold text-[#10233f] shadow-md hover:bg-slate-50 transition-colors"
+  >
+    Show Result
+  </label>
+
+  <!-- Bottom-right: live-style vote counter (static, not wired to the form) -->
+  <div class="fixed bottom-6 right-6 w-64 rounded-lg border border-slate-200 bg-white shadow-md p-4">
+    <p class="text-xs font-semibold tracking-wide uppercase text-slate-400 mb-3">Vote Count</p>
+    <div class="space-y-2.5">
+      <div class="flex items-center justify-between">
+        <span class="text-sm text-slate-700">Candidate A — Augustine Chukwu</span>
+        <span class="text-sm font-bold text-[#10233f]">14</span>
+      </div>
+      <div class="flex items-center justify-between">
+        <span class="text-sm text-slate-700">Candidate B — Lilian Ezeh</span>
+        <span class="text-sm font-bold text-[#10233f]">11</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal overlay: hidden by default, shown via the #result-toggle:checked CSS rule above -->
+  <div
+    id="result-modal"
+    class="hidden fixed inset-0 z-50 items-center justify-center bg-black/50 px-4"
+  >
+    <div class="relative w-full max-w-md rounded-lg bg-white shadow-xl p-6">
+
+      <!-- Close button: a second label for the same checkbox -->
+      <label
+        for="result-toggle"
+        class="absolute top-4 right-4 cursor-pointer text-slate-400 hover:text-slate-600 text-xl leading-none"
+        aria-label="Close"
+      >
+        &times;
+      </label>
+
+      <h3 class="font-serif text-lg font-semibold text-slate-900 mb-1">Election Result</h3>
+      <p class="text-sm text-slate-500 mb-5">Current standing based on votes cast so far.</p>
+
+      <div class="space-y-4">
+        <div>
+          <div class="flex items-center justify-between text-sm mb-1">
+            <span class="font-medium text-slate-700">Candidate A — Augustine Chukwu</span>
+            <span class="font-semibold text-slate-900">14 votes</span>
+          </div>
+          <div class="w-full h-2 rounded-full bg-slate-100">
+            <div class="h-2 rounded-full bg-[#10233f]" style="width: 56%"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between text-sm mb-1">
+            <span class="font-medium text-slate-700">Candidate B — Lilian Ezeh</span>
+            <span class="font-semibold text-slate-900">11 votes</span>
+          </div>
+          <div class="w-full h-2 rounded-full bg-slate-100">
+            <div class="h-2 rounded-full bg-[#c9a24b]" style="width: 44%"></div>
+          </div>
+        </div>
+      </div>
+
+      <label
+        for="result-toggle"
+        class="mt-6 inline-flex w-full cursor-pointer items-center justify-center rounded-md bg-[#10233f] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#193153] transition-colors"
+      >
+        Close
+      </label>
+    </div>
+  </div>
+
 </body>
 </html>
