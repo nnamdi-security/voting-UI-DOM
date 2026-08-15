@@ -1,303 +1,312 @@
-const candidates = [
-    'Augustine',
-    'Kosisochukwu',
-] as const;
+// --------------------------------------
+// TYPES
+// --------------------------------------
 
-type TCandidate = typeof candidates[number];
-
-
-const voters = [
-    'Stephanie',
-    'Rita',
-    'James',
-    'Peter',
-    'Victor',
-    'Anthony',
-    'Charles',
-    'Augustine',
-    'Lillian',
-    'Gabriel',
-    'Christopher',
-    'Kosisochukwu',
-    'Bonaventure',
-    'Abigail',
-    'David',
-    'Amarachi',
-    'Loveth',
-    'Chidimma',
-    'Ifeanyi',
-    'Majesty',
-] as const;
-
-type TVoter = typeof voters[number];
+// A candidate is simply a string.
+// This allows us to have more than two candidates.
+type TCandidate = string;
 
 
-type Tpoll =Record<TCandidate, TVoter>;
-
-const poll = Object.fromEntries(candidates.map((candidate) => [candidate, 0])) as Tpoll
-
-interface Result {
-    total: number;
-    poll: Tpoll;
-}
-
-const result: Result = {
-    total: 0,
-    poll,
-};
+// A voter is also a string.
+type TVoter = string;
 
 
-const ballotForm =
-    document.querySelector<HTMLFormElement>(
-        '#ballot-form',
-    );
-
-const voterSelect =
-    document.querySelector<HTMLSelectElement>(
-        '#voter',
-    );
-
-const candidateSelect =
-    document.querySelector<HTMLSelectElement>(
-        '#candidate',
-    );
-
-const showResultsButton =
-    document.querySelector<HTMLButtonElement>(
-        '#show-results-button',
-    );
-
-const resultsPanel =
-    document.querySelector<HTMLElement>(
-        '#results-panel',
-    );
-
-const totalVotesElement =
-    document.querySelector<HTMLElement>(
-        '#total-votes',
-    );
-
-const candidateResultsElement =
-    document.querySelector<HTMLElement>(
-        '#candidate-results',
-    );
-
-const winnerMessage =
-    document.querySelector<HTMLElement>(
-        '#winner-message',
-    );
+// The poll keeps track of the number of votes
+// received by each candidate.
+type TPoll = Record<TCandidate, number>;
 
 
-const populateVoters = (): void => {
-    voters.forEach((voter) => {
-        const option =
-            document.createElement('option');
+// --------------------------------------
+// DATA
+// --------------------------------------
 
-        option.value = voter;
-        option.textContent = voter;
+// Candidates are no longer restricted to two people.
+// You can add as many candidates as you want.
+const candidates: TCandidate[] = [
+  "Augustine",
+  "Kosisochukwu",
+  "Chidimma",
+  "Ifeanyi"
+];
 
-        voterSelect.append(option);
-    });
-};
 
-const populateCandidates = (): void => {
-    candidates.forEach((candidate) => {
-        const option =
-            document.createElement('option');
+// Voters are stored in an array.
+// They are no longer hard-coded into the HTML.
+const voters: TVoter[] = [
+  "Stephanie",
+  "Rita",
+  "James",
+  "Peter",
+  "Victor",
+  "Anthony",
+  "Charles",
+  "Augustine",
+  "Lillian",
+  "Gabriel",
+  "Christopher",
+  "Kosisochukwu",
+  "Bonaventure",
+  "Abigail",
+  "David",
+  "Amarachi",
+  "Loveth",
+  "Chidimma",
+  "Ifeanyi",
+  "Majesty"
+];
 
-        option.value = candidate;
-        option.textContent = candidate;
 
-        candidateSelect.append(option);
-    });
-};
+// --------------------------------------
+// POLL
+// --------------------------------------
 
+// This object will contain the number of votes
+// received by each candidate.
+const poll: TPoll = {};
+
+
+// Give every candidate an initial vote count of 0.
+candidates.forEach((candidate) => {
+  poll[candidate] = 0;
+});
+
+
+// Total number of votes
+let voteCount: number = 0;
+
+
+// --------------------------------------
+// DOM ELEMENTS
+// --------------------------------------
+
+// Get the voter dropdown from the HTML.
+const voterSelect = document.querySelector(
+  "#voter"
+) as HTMLSelectElement;
+
+
+// Get the candidate dropdown.
+const candidateSelect = document.querySelector(
+  "#candidate"
+) as HTMLSelectElement;
+
+
+// Get the Cast Vote button.
+const castVoteButton = document.querySelector(
+  "#castVote"
+) as HTMLButtonElement;
+
+
+// Get the Show Result button.
+const showResultButton = document.querySelector(
+  "#showResult"
+) as HTMLButtonElement;
+
+
+// Get the result container.
+const resultDiv = document.querySelector(
+  "#result"
+) as HTMLDivElement;
+
+
+// --------------------------------------
+// POPULATE VOTERS
+// --------------------------------------
+
+// Go through the voters array.
+voters.forEach((voter) => {
+
+  // Create an option element.
+  const option = document.createElement("option");
+
+  // Put the voter's name inside the option.
+  option.textContent = voter;
+
+  // The value of the option is also the voter's name.
+  option.value = voter;
+
+  // Add the option to the voter dropdown.
+  voterSelect.appendChild(option);
+});
+
+
+// --------------------------------------
+// POPULATE CANDIDATES
+// --------------------------------------
+
+// Go through the candidates array.
+candidates.forEach((candidate) => {
+
+  // Create an option element.
+  const option = document.createElement("option");
+
+  // Put the candidate's name inside the option.
+  option.textContent = candidate;
+
+  // The value is the candidate's name.
+  option.value = candidate;
+
+  // Add the option to the candidate dropdown.
+  candidateSelect.appendChild(option);
+});
+
+
+// --------------------------------------
+// CAST VOTE
+// --------------------------------------
 
 const vote = (
-    voter: TVoter,
-    candidate: TCandidate,
-): void => {
-    console.log(
-        `${voter} voted for ${candidate}`,
-    );
+  voter: TVoter,
+  candidate: TCandidate
+) => {
 
-    result.poll[candidate] += 1;
+  // Display the selected voter in the console.
+  console.log(`${voter} is voting for ${candidate}`);
 
-    result.total += 1;
+  // Increase the candidate's vote count by 1.
+  poll[candidate] = (poll[candidate] ?? 0) + 1;
+
+  // Increase total vote count.
+  voteCount++;
+
+  // Display the current poll in the console.
+  console.log(poll);
 };
+
+
+// --------------------------------------
+// CAST VOTE BUTTON
+// --------------------------------------
+
+castVoteButton.addEventListener("click", () => {
+
+  // Get the selected voter.
+  const voter = voterSelect.value;
+
+  // Get the selected candidate.
+  const candidate = candidateSelect.value;
+
+
+  // Make sure both have been selected.
+  if (!voter || !candidate) {
+
+    resultDiv.innerHTML = `
+      <p class="text-red-600">
+        Please select a voter and a candidate.
+      </p>
+    `;
+
+    return;
+  }
+
+
+  // Cast the vote.
+  vote(voter, candidate);
+
+
+  // Tell the user that the vote was successfully cast.
+  resultDiv.innerHTML = `
+    <p class="text-green-600">
+      ${voter}'s vote for ${candidate} has been recorded.
+    </p>
+  `;
+
+
+  // Reset the dropdowns after voting.
+  voterSelect.value = "";
+  candidateSelect.value = "";
+});
+
+
+// --------------------------------------
+// GET WINNER
+// --------------------------------------
 
 const getWinner = (): TCandidate | undefined => {
-    if (result.total === 0) {
-        return undefined;
+
+  // If there are no votes, there is no winner.
+  if (voteCount === 0) {
+    return undefined;
+  }
+
+
+  // Start by assuming the first candidate is the winner.
+  let winner = candidates[0];
+
+
+  // Compare every candidate's votes.
+  candidates.forEach((candidate) => {
+
+    if (poll[candidate] > poll[winner]) {
+      winner = candidate;
     }
 
-    const sortedCandidates = (
-        Object.entries(result.poll) as [
-            TCandidate,
-            number,
-        ][]
-    ).sort(
-        (candidateA, candidateB) =>
-            candidateB[1] - candidateA[1],
-    );
+  });
 
-    const firstCandidate =
-        sortedCandidates[0];
 
-    const secondCandidate =
-        sortedCandidates[1];
-    
-     if (
-        secondCandidate &&
-        firstCandidate[1] === secondCandidate[1]
-    ) {
-        return undefined;
-    }
-
-    return firstCandidate[0];
+  return winner;
 };
 
 
-const displayResult = (): void => {
-    /*
-     * Display total votes cast.
-     */
-    totalVotesElement.textContent =
-        `${result.total} / ${voters.length}`;
+// --------------------------------------
+// SHOW RESULT
+// --------------------------------------
+
+showResultButton.addEventListener("click", () => {
+
+  // Get the winner.
+  const winner = getWinner();
 
 
-    /*
-     * Remove previously displayed candidate results.
-     */
-    candidateResultsElement.replaceChildren();
+  // If nobody has voted yet.
+  if (!winner) {
+
+    resultDiv.innerHTML = `
+      <p class="text-gray-500">
+        No votes have been cast yet.
+      </p>
+    `;
+
+    return;
+  }
 
 
-    /*
-     * Display every candidate and their vote count.
-     */
-    Object.entries(result.poll).forEach(
-        ([candidate, votes]) => {
-            const article =
-                document.createElement('article');
+  // Start building the result HTML.
+  let resultHTML = `
+    <p class="font-semibold mb-4">
+      Total Votes: ${voteCount}
+    </p>
 
-            article.className =
-                'flex items-center justify-between gap-4 border-b border-slate-200 py-4';
-
-            const candidateName =
-                document.createElement('h3');
-
-        candidateName.className =
-                'font-semibold';
-
-            candidateName.textContent =
-                candidate;
+    <div class="space-y-2">
+  `;
 
 
-            const voteCount =
-                document.createElement('strong');
+  // Display each candidate and their votes.
+  candidates.forEach((candidate) => {
 
-            voteCount.className =
-                'text-sm';
+    resultHTML += `
+      <div class="flex justify-between border-b pb-2">
+        <span>${candidate}</span>
+        <span class="font-semibold">
+          ${poll[candidate]} vote(s)
+        </span>
+      </div>
+    `;
 
-            voteCount.textContent =
-                `${votes} ${votes === 1 ? 'vote' : 'votes'}`;
-
-
-            article.append(
-                candidateName,
-                voteCount,
-            );
-
-            candidateResultsElement.append(
-                article,
-            );
-        },
-    );
-
-            const winner = getWinner();
+  });
 
 
-                if (result.total === 0) {
-                    winnerMessage.textContent =
-                        'No votes have been cast yet.';
+  // Close the result container and display the winner.
+  resultHTML += `
+    </div>
 
-                    return;
-                }
-
-
-                if (!winner) {
-                    winnerMessage.textContent =
-                        'The election is currently tied.';
-
-                    return;
-                }
+    <p class="mt-5 text-lg font-bold">
+      Winner: ${winner}
+    </p>
+  `;
 
 
-                    winnerMessage.textContent =
-                        `${winner} is currently leading with ${result.poll[winner]} votes.`;
-};
+  // Put the result into the page.
+  resultDiv.innerHTML = resultHTML;
 
-
-
-ballotForm.addEventListener(
-    'submit',
-    (event) => {
-        /*
-         * Stop the browser from reloading the page.
-         */
-        event.preventDefault();
-
-
-        /*
-         * Read the values selected in the form.
-         */
-        const voter =
-            voterSelect.value as TVoter;
-
-        const candidate =
-            candidateSelect.value as TCandidate;
-
-
-        /*
-         * Cast the selected vote.
-         */
-        vote(
-            voter,
-            candidate,
-             );
-
-
-        /*
-         * Update the result.
-         */
-        displayResult();
-
-
-        /*
-         * Reset the form after voting.
-         */
-        ballotForm.reset();
-    },
-);
-
-
-showResultsButton.addEventListener(
-    'click',
-    () => {
-        resultsPanel.hidden =
-            !resultsPanel.hidden;
-    },
-);
-
-
-/*
-|--------------------------------------------------------------------------
-| Start Application
-|--------------------------------------------------------------------------
-*/
-
-populateVoters();
-
-populateCandidates();
-
-displayResult();
+});

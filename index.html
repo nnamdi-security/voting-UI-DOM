@@ -1,459 +1,126 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simple Voting System</title>
 
-    <meta name="description" content="Head of House election ballot for Hackathon 3.0." />
-
-    <title>Head of House Election</title>
-
-    <link href="/src/style.css" rel="stylesheet"/>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 
-<body class="min-h-screen bg-slate-100 text-slate-950">
-    <!--
-        ================================================================
-        PAGE HEADER
-        ================================================================
-    -->
-    <header class="border-t-4 border-amber-400 bg-slate-900 text-white">
-        <div class="mx-auto max-w-5xl px-4 py-7 sm:px-6 lg:px-8">
-            <p
-                class="
-                    text-xs
-                    font-bold
-                    uppercase
-                    tracking-[0.3em]
-                    text-amber-400
-                    text-center
-                "
-            >
-                Hackathon 3.0
-            </p>
+<body class="bg-gray-100 min-h-screen">
 
-            <h1
-                class="
-                    mt-2
-                    font-serif
-                    text-3xl
-                    font-bold
-                    sm:text-4xl
-                    text-center
-                "
-            >
-                Head of House [S]Election
-            </h1>
-        </div>
+  <main class="max-w-xl mx-auto px-4 py-10">
+
+    <!-- Page heading -->
+    <header class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-800">
+        Simple Voting System
+      </h1>
+
+      <p class="text-gray-600 mt-2">
+        Select a voter and candidate, then cast your vote.
+      </p>
     </header>
 
-    <!--
-        ================================================================
-        MAIN CONTENT
-        ================================================================
-    -->
-    <main
-        class="
-            mx-auto
-            flex
-            w-full
-            max-w-5xl
-            flex-1
-            flex-col
-            px-4
-            py-10
-            sm:px-6
-            lg:px-8
-        "
-    >
-        <!--
-            ------------------------------------------------------------
-            BALLOT CARD
-            ------------------------------------------------------------
-        -->
-        <section
-            aria-labelledby="ballot-heading"
-            class="
-                rounded-2xl
-                border
-                border-slate-200
-                bg-white
-                p-6
-                shadow-sm
-                sm:p-8
-            "
+
+    <!-- Voting section -->
+    <section class="bg-white p-6 rounded-lg shadow-md">
+
+      <h2 class="text-xl font-semibold mb-6">
+        Cast Your Vote
+      </h2>
+
+
+      <!-- Voter selection -->
+      <div class="mb-5">
+
+        <label
+          for="voter"
+          class="block text-sm font-medium text-gray-700 mb-2"
         >
-            <header>
-                <h2
-                    id="ballot-heading"
-                    class="font-serif text-2xl font-bold"
-                >
-                    Cast your vote
-                </h2>
+          Select Voter
+        </label>
 
-                <p class="mt-2 text-sm leading-6 text-slate-600 sm:text-base">
-                    Select your name and your preferred candidate,
-                    then submit your ballot.
-                </p>
-            </header>
-
-            <!-- Voting form -->
-            <form
-                id="ballot-form"
-                class="mt-8 space-y-6"
-            >
-                <div
-                    class="
-                        grid
-                        gap-6
-                        md:grid-cols-2
-                    "
-                >
-                    <!-- Voter -->
-                    <div>
-                        <label
-                            for="voter"
-                            class="
-                                mb-2
-                                block
-                                text-sm
-                                font-semibold
-                                text-slate-800
-                            "
-                        >
-                            Your name
-                        </label>
-
-                        <select
-                            id="voter"
-                            name="voter"
-                            required
-                            class="
-                                w-full
-                                rounded-lg
-                                border
-                                border-slate-300
-                                bg-white
-                                px-4
-                                py-3
-                                text-base
-                                text-slate-900
-                                outline-none
-                                transition
-                                focus:border-slate-900
-                                focus:ring-2
-                                focus:ring-slate-900/10
-                            "
-                        >
-                            <option value="">
-                                Select your name
-                            </option>
-                        </select>
-                    </div>
-
-                    <!-- Candidate -->
-                    <div>
-                        <label
-                            for="candidate"
-                            class="
-                                mb-2
-                                block
-                                text-sm
-                                font-semibold
-                                text-slate-800
-                            "
-                        >
-                            Candidate
-                        </label>
-
-                        <select
-                            id="candidate"
-                            name="candidate"
-                            required
-                            class="
-                                w-full
-                                rounded-lg
-                                border
-                                border-slate-300
-                                bg-white
-                                px-4
-                                py-3
-                                text-base
-                                text-slate-900
-                                outline-none
-                                transition
-                                focus:border-slate-900
-                                focus:ring-2
-                                focus:ring-slate-900/10
-                            "
-                        >
-                            <option value="">
-                                Select a candidate
-                            </option>
-                        </select>
-                    </div>
-                </div>
-
-                <div
-                    class="
-                        flex
-                        flex-col
-                        gap-4
-                        sm:flex-row
-                        sm:items-center
-                    "
-                >
-                    <button
-                        id="vote-button"
-                        type="submit"
-                        class="
-                            rounded-lg
-                            bg-slate-900
-                            px-6
-                            py-3
-                            text-sm
-                            font-bold
-                            text-white
-                            transition
-                            hover:bg-slate-800
-                            focus:outline-none
-                            focus:ring-2
-                            focus:ring-slate-900
-                            focus:ring-offset-2
-                            disabled:cursor-not-allowed
-                            disabled:opacity-50
-                        "
-                    >
-                        Cast vote
-                    </button>
-
-                    <p
-                        id="form-message"
-                        role="status"
-                        aria-live="polite"
-                        class="min-h-5 text-sm font-medium"
-                    ></p>
-                </div>
-            </form>
-        </section>
-
-        <!--
-            ------------------------------------------------------------
-            RESULT BUTTON
-            ------------------------------------------------------------
-        -->
-        <div class="mt-6">
-            <button
-                id="show-results-button"
-                type="button"
-                aria-controls="results-panel"
-                aria-expanded="false"
-                class="
-                    rounded-lg
-                    border
-                    border-slate-900
-                    bg-white
-                    px-5
-                    py-2.5
-                    text-sm
-                    font-semibold
-                    text-slate-900
-                    shadow-sm
-                    transition
-                    hover:bg-slate-50
-                    focus:outline-none
-                    focus:ring-2
-                    focus:ring-slate-900
-                    focus:ring-offset-2
-                "
-            >
-                Show result
-            </button>
-        </div>
-
-        <!--
-            ------------------------------------------------------------
-            RESULT PANEL
-            ------------------------------------------------------------
-        -->
-        <section
-            id="results-panel"
-            aria-labelledby="results-heading"
-            hidden
-            class="
-                mt-6
-                rounded-2xl
-                border
-                border-slate-200
-                bg-white
-                p-6
-                shadow-sm
-                sm:p-8
-            "
+        <select
+          id="voter"
+          class="w-full border border-gray-300 rounded-md px-3 py-2"
         >
-            <header
-                class="
-                    border-b
-                    border-slate-200
-                    pb-5
-                "
-            >
-                <h2
-                    id="results-heading"
-                    class="font-serif text-2xl font-bold"
-                >
-                    Election result
-                </h2>
+          <option value="">Select voter</option>
+        </select>
 
-                <p class="mt-2 text-sm text-slate-600">
-                    Current standing based on votes submitted so far.
-                </p>
-            </header>
+      </div>
 
-            <div class="mt-6">
-                <p class="text-sm font-medium text-slate-600">
-                    Total votes
 
-                    <strong
-                        id="total-votes"
-                        class="ml-1 text-slate-950"
-                    >
-                        0 / 20
-                    </strong>
-                </p>
-            </div>
+      <!-- Candidate selection -->
+      <div class="mb-6">
 
-            <!-- Augustine -->
-            <article class="mt-6">
-                <div
-                    class="
-                        flex
-                        items-center
-                        justify-between
-                        gap-4
-                    "
-                >
-                    <h3 class="font-semibold">
-                        Augustine
-                    </h3>
+        <label
+          for="candidate"
+          class="block text-sm font-medium text-gray-700 mb-2"
+        >
+          Select Candidate
+        </label>
 
-                    <strong class="text-sm">
-                        <span id="augustine-votes">0</span>
-                        votes
-                    </strong>
-                </div>
+        <select
+          id="candidate"
+          class="w-full border border-gray-300 rounded-md px-3 py-2"
+        >
+          <option value="">Select candidate</option>
+        </select>
 
-                <div
-                    class="
-                        mt-2
-                        h-2
-                        overflow-hidden
-                        rounded-full
-                        bg-slate-200
-                    "
-                >
-                    <div
-                        id="augustine-progress"
-                        class="
-                            h-full
-                            rounded-full
-                            bg-slate-900
-                            transition-all
-                            duration-300
-                        "
-                        style="width: 0%"
-                    ></div>
-                </div>
-            </article>
+      </div>
 
-            <!-- Kosisochukwu -->
-            <article class="mt-6">
-                <div
-                    class="
-                        flex
-                        items-center
-                        justify-between
-                        gap-4
-                    "
-                >
-                    <h3 class="font-semibold">
-                        Kosisochukwu
-                    </h3>
 
-                    <strong class="text-sm">
-                        <span id="kosisochukwu-votes">0</span>
-                        votes
-                    </strong>
-                </div>
+      <!-- Buttons -->
+      <div class="flex gap-3">
 
-                <div
-                    class="
-                        mt-2
-                        h-2
-                        overflow-hidden
-                        rounded-full
-                        bg-slate-200
-                    "
-                >
-                    <div
-                        id="kosisochukwu-progress"
-                        class="
-                            h-full
-                            rounded-full
-                            bg-amber-500
-                            transition-all
-                            duration-300
-                        "
-                        style="width: 0%"
-                    ></div>
-                </div>
-            </article>
+        <button
+          id="castVote"
+          type="button"
+          class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+        >
+          Cast Vote
+        </button>
 
-            <p
-                id="winner-message"
-                aria-live="polite"
-                class="
-                    mt-7
-                    rounded-lg
-                    bg-slate-100
-                    px-4
-                    py-3
-                    text-sm
-                    font-semibold
-                    text-slate-800
-                "
-            >
-                No votes have been cast yet.
-            </p>
-        </section>
-    </main>
+        <button
+          id="showResult"
+          type="button"
+          class="flex-1 bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-800"
+        >
+          Show Result
+        </button>
 
-    <!--
-        ================================================================
-        PAGE FOOTER
-        ================================================================
-    -->
-    <footer
-        class="
-            mt-auto
-            border-t
-            border-slate-200
-            px-4
-            py-6
-            text-center
-            text-xs
-            text-slate-500
-        "
+      </div>
+
+    </section>
+
+
+    <!-- Result section -->
+    <section
+      id="resultSection"
+      class="bg-white p-6 rounded-lg shadow-md mt-6"
     >
-        <p>
-            Hackathon 3.0 — Head of House Election
+
+      <h2 class="text-xl font-semibold mb-4">
+        Election Result
+      </h2>
+
+      <div id="result">
+        <p class="text-gray-500">
+          Click "Show Result" to view the result.
         </p>
-    </footer>
+      </div>
 
-    <script
-        type="module"
-        src="/src/main.ts"
-    ></script>
+    </section>
+
+  </main>
+
+
+  <!-- Your TypeScript file -->
+  <script type="module" src="/src/main.ts"></script>
+
 </body>
 </html>
