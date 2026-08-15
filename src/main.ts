@@ -1,60 +1,303 @@
-import './style.css'
-import typescriptLogo from './assets/typescript.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import { setupCounter } from './counter.ts'
+const candidates = [
+    'Augustine',
+    'Kosisochukwu',
+] as const;
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-<section id="center">
-  <div class="hero">
-    <img src="${heroImg}" class="base" width="170" height="179">
-    <img src="${typescriptLogo}" class="framework" alt="TypeScript logo"/>
-    <img src="${viteLogo}" class="vite" alt="Vite logo" />
-  </div>
-  <div>
-    <h1>Get started</h1>
-    <p>Edit <code>src/main.ts</code> and save to test <code>HMR</code></p>
-  </div>
-  <button id="counter" type="button" class="counter"></button>
-</section>
+type TCandidate = typeof candidates[number];
 
-<div class="ticks"></div>
 
-<section id="next-steps">
-  <div id="docs">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#documentation-icon"></use></svg>
-    <h2>Documentation</h2>
-    <p>Your questions, answered</p>
-    <ul>
-      <li>
-        <a href="https://vite.dev/" target="_blank">
-          <img class="logo" src="${viteLogo}" alt="" />
-          Explore Vite
-        </a>
-      </li>
-      <li>
-        <a href="https://www.typescriptlang.org" target="_blank">
-          <img class="button-icon" src="${typescriptLogo}" alt="">
-          Learn more
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div id="social">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#social-icon"></use></svg>
-    <h2>Connect with us</h2>
-    <p>Join the Vite community</p>
-    <ul>
-      <li><a href="https://github.com/vitejs/vite" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#github-icon"></use></svg>GitHub</a></li>
-      <li><a href="https://chat.vite.dev/" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#discord-icon"></use></svg>Discord</a></li>
-      <li><a href="https://x.com/vite_js" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#x-icon"></use></svg>X.com</a></li>
-      <li><a href="https://bsky.app/profile/vite.dev" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#bluesky-icon"></use></svg>Bluesky</a></li>
-    </ul>
-  </div>
-</section>
+const voters = [
+    'Stephanie',
+    'Rita',
+    'James',
+    'Peter',
+    'Victor',
+    'Anthony',
+    'Charles',
+    'Augustine',
+    'Lillian',
+    'Gabriel',
+    'Christopher',
+    'Kosisochukwu',
+    'Bonaventure',
+    'Abigail',
+    'David',
+    'Amarachi',
+    'Loveth',
+    'Chidimma',
+    'Ifeanyi',
+    'Majesty',
+] as const;
 
-<div class="ticks"></div>
-<section id="spacer"></section>
-`
+type TVoter = typeof voters[number];
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+
+type Tpoll =Record<TCandidate, TVoter>;
+
+const poll = Object.fromEntries(candidates.map((candidate) => [candidate, 0])) as Tpoll
+
+interface Result {
+    total: number;
+    poll: Tpoll;
+}
+
+const result: Result = {
+    total: 0,
+    poll,
+};
+
+
+const ballotForm =
+    document.querySelector<HTMLFormElement>(
+        '#ballot-form',
+    );
+
+const voterSelect =
+    document.querySelector<HTMLSelectElement>(
+        '#voter',
+    );
+
+const candidateSelect =
+    document.querySelector<HTMLSelectElement>(
+        '#candidate',
+    );
+
+const showResultsButton =
+    document.querySelector<HTMLButtonElement>(
+        '#show-results-button',
+    );
+
+const resultsPanel =
+    document.querySelector<HTMLElement>(
+        '#results-panel',
+    );
+
+const totalVotesElement =
+    document.querySelector<HTMLElement>(
+        '#total-votes',
+    );
+
+const candidateResultsElement =
+    document.querySelector<HTMLElement>(
+        '#candidate-results',
+    );
+
+const winnerMessage =
+    document.querySelector<HTMLElement>(
+        '#winner-message',
+    );
+
+
+const populateVoters = (): void => {
+    voters.forEach((voter) => {
+        const option =
+            document.createElement('option');
+
+        option.value = voter;
+        option.textContent = voter;
+
+        voterSelect.append(option);
+    });
+};
+
+const populateCandidates = (): void => {
+    candidates.forEach((candidate) => {
+        const option =
+            document.createElement('option');
+
+        option.value = candidate;
+        option.textContent = candidate;
+
+        candidateSelect.append(option);
+    });
+};
+
+
+const vote = (
+    voter: TVoter,
+    candidate: TCandidate,
+): void => {
+    console.log(
+        `${voter} voted for ${candidate}`,
+    );
+
+    result.poll[candidate] += 1;
+
+    result.total += 1;
+};
+
+const getWinner = (): TCandidate | undefined => {
+    if (result.total === 0) {
+        return undefined;
+    }
+
+    const sortedCandidates = (
+        Object.entries(result.poll) as [
+            TCandidate,
+            number,
+        ][]
+    ).sort(
+        (candidateA, candidateB) =>
+            candidateB[1] - candidateA[1],
+    );
+
+    const firstCandidate =
+        sortedCandidates[0];
+
+    const secondCandidate =
+        sortedCandidates[1];
+    
+     if (
+        secondCandidate &&
+        firstCandidate[1] === secondCandidate[1]
+    ) {
+        return undefined;
+    }
+
+    return firstCandidate[0];
+};
+
+
+const displayResult = (): void => {
+    /*
+     * Display total votes cast.
+     */
+    totalVotesElement.textContent =
+        `${result.total} / ${voters.length}`;
+
+
+    /*
+     * Remove previously displayed candidate results.
+     */
+    candidateResultsElement.replaceChildren();
+
+
+    /*
+     * Display every candidate and their vote count.
+     */
+    Object.entries(result.poll).forEach(
+        ([candidate, votes]) => {
+            const article =
+                document.createElement('article');
+
+            article.className =
+                'flex items-center justify-between gap-4 border-b border-slate-200 py-4';
+
+            const candidateName =
+                document.createElement('h3');
+
+        candidateName.className =
+                'font-semibold';
+
+            candidateName.textContent =
+                candidate;
+
+
+            const voteCount =
+                document.createElement('strong');
+
+            voteCount.className =
+                'text-sm';
+
+            voteCount.textContent =
+                `${votes} ${votes === 1 ? 'vote' : 'votes'}`;
+
+
+            article.append(
+                candidateName,
+                voteCount,
+            );
+
+            candidateResultsElement.append(
+                article,
+            );
+        },
+    );
+
+            const winner = getWinner();
+
+
+                if (result.total === 0) {
+                    winnerMessage.textContent =
+                        'No votes have been cast yet.';
+
+                    return;
+                }
+
+
+                if (!winner) {
+                    winnerMessage.textContent =
+                        'The election is currently tied.';
+
+                    return;
+                }
+
+
+                    winnerMessage.textContent =
+                        `${winner} is currently leading with ${result.poll[winner]} votes.`;
+};
+
+
+
+ballotForm.addEventListener(
+    'submit',
+    (event) => {
+        /*
+         * Stop the browser from reloading the page.
+         */
+        event.preventDefault();
+
+
+        /*
+         * Read the values selected in the form.
+         */
+        const voter =
+            voterSelect.value as TVoter;
+
+        const candidate =
+            candidateSelect.value as TCandidate;
+
+
+        /*
+         * Cast the selected vote.
+         */
+        vote(
+            voter,
+            candidate,
+             );
+
+
+        /*
+         * Update the result.
+         */
+        displayResult();
+
+
+        /*
+         * Reset the form after voting.
+         */
+        ballotForm.reset();
+    },
+);
+
+
+showResultsButton.addEventListener(
+    'click',
+    () => {
+        resultsPanel.hidden =
+            !resultsPanel.hidden;
+    },
+);
+
+
+/*
+|--------------------------------------------------------------------------
+| Start Application
+|--------------------------------------------------------------------------
+*/
+
+populateVoters();
+
+populateCandidates();
+
+displayResult();
