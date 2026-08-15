@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Simple Voting System</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+  <main class="max-w-xl mx-auto px-4 py-10">
+
+    <!-- Page heading -->
+    <header class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-800">
+        Simple Voting System
+      </h1>
+
+      <p class="text-gray-600 mt-2">
+        Select a voter and candidate, then cast your vote.
+      </p>
+    </header>
+
+
+    <!-- Voting section -->
+    <section class="bg-white p-6 rounded-lg shadow-md">
+
+      <h2 class="text-xl font-semibold mb-6">
+        Cast Your Vote
+      </h2>
+
+
+      <!-- Voter selection -->
+      <div class="mb-5">
+
+        <label
+          for="voter"
+          class="block text-sm font-medium text-gray-700 mb-2"
+        >
+          Select Voter
+        </label>
+
+        <select
+          id="voter"
+          class="w-full border border-gray-300 rounded-md px-3 py-2"
+        >
+          <option value="">Select voter</option>
+        </select>
+
+      </div>
+
+
+      <!-- Candidate selection -->
+      <div class="mb-6">
+
+        <label
+          for="candidate"
+          class="block text-sm font-medium text-gray-700 mb-2"
+        >
+          Select Candidate
+        </label>
+
+        <select
+          id="candidate"
+          class="w-full border border-gray-300 rounded-md px-3 py-2"
+        >
+          <option value="">Select candidate</option>
+        </select>
+
+      </div>
+
+
+      <!-- Buttons -->
+      <div class="flex gap-3">
+
+        <button
+          id="castVote"
+          type="button"
+          class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+        >
+          Cast Vote
+        </button>
+
+        <button
+          id="showResult"
+          type="button"
+          class="flex-1 bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-800"
+        >
+          Show Result
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- Result section -->
+    <section
+      id="resultSection"
+      class="bg-white p-6 rounded-lg shadow-md mt-6"
+    >
+
+      <h2 class="text-xl font-semibold mb-4">
+        Election Result
+      </h2>
+
+      <div id="result">
+        <p class="text-gray-500">
+          Click "Show Result" to view the result.
+        </p>
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- Your TypeScript file -->
+  <script type="module" src="/src/main.ts"></script>
+
+</body>
+</html>
