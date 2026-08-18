@@ -4,6 +4,8 @@ A simple voting app built with **Vite**, **TypeScript**, and **Tailwind CSS**, u
 
 ![Hackathon 3.0](https://img.shields.io/badge/Hackathon-3.0-132743?style=flat-square&labelColor=132743&color=f59e0b)
 
+[GitHub Page]:(https://nnamdi-security.github.io/voting-UI-DOM/)
+
 ## Features
 
 - 🗳️ **Cast a vote** — select a voter and a candidate, then submit the ballot
